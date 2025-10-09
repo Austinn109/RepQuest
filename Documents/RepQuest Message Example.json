@@ -1,0 +1,122 @@
+[{
+    "userID": "123",
+    "level": 12,
+    "totalXp": 500
+},
+[
+    {
+        "templateID" : "T123A",
+        "templateName" : "Workout 1",
+        "exercises" : [
+            {
+                "exerciseName" : "Bench Press",
+                "exerciseSets" : 3,
+                "exerciseReps" : 10,
+                "exerciseWeights" : "125lbs",
+                "isIncremental" : true,
+                "increments" : "5",
+                "restTime" : "60 seconds"
+            },
+            {
+                "exerciseName" : "Inclined Bench Press",
+                "exerciseSets" : 3,
+                "exerciseReps" : 10,
+                "exerciseWeights" : "125lbs",
+                "isIncremental" : true,
+                "increments" : "5",
+                "restTime" : "60 seconds"
+            }
+        ]
+    }
+],
+[
+    {
+        "dateCompleted" : "10/01/2025",
+        "exercises" : [
+            {
+                "exerciseName" : "Bench Press",
+                "exerciseSets" : 3,
+                "exerciseReps" : 10,
+                "exerciseWeights" : "125lbs",
+                "isIncremental" : true,
+                "increments" : "5",
+                "restTime" : "60 seconds",
+                "notes" : "Example Note"
+            },
+            {
+                "exerciseName" : "Inclined Bench Press",
+                "exerciseSets" : 3,
+                "exerciseReps" : 10,
+                "exerciseWeights" : "125lbs",
+                "isIncremental" : true,
+                "increments" : "5",
+                "restTime" : "60 seconds",
+                "notes" : "Example Note"
+            }
+        ]
+    },
+    {
+        "dateCompleted" : "10/05/2025",
+        "exercises" : [
+            {
+                "exerciseName" : "Bench Press",
+                "exerciseSets" : 3,
+                "exerciseReps" : 10,
+                "exerciseWeights" : "125lbs",
+                "isIncremental" : true,
+                "increments" : "5",
+                "restTime" : "60 seconds",
+                "notes" : "Example Note"
+            },
+            {
+                "exerciseName" : "Inclined Bench Press",
+                "exerciseSets" : 3,
+                "exerciseReps" : 10,
+                "exerciseWeights" : "125lbs",
+                "isIncremental" : true,
+                "increments" : "5",
+                "restTime" : "60 seconds",
+                "notes" : "Example Note"
+            }
+        ]
+    }
+],
+[
+    {
+        "exerciseName" : "Bench Press",
+        "datesAttempted" : ["10/01/2025","10/03/2025","10/05/2025"],
+        "amountAchieved" : ["20","20","21"]
+    },
+    {
+        "exerciseName" : "Inclined Bench Press",
+        "datesAttempted" : ["10/01/2025","10/03/2025","10/05/2025"],
+        "amountAchieved" : ["20","20","21"]
+    }
+],
+[
+    {
+        "goalID" : "G123A",
+        "goalExercise" : "Bench Press",
+        "goalTarget" : "3 x 10",
+        "goalWeight" : "125lbs",
+        "goalStatus" : "Complete"
+    },
+    {
+        "goalID" : "G123B",
+        "goalExercise" : "Inclined Bench Press",
+        "goalTarget" : "3 x 10",
+        "goalWeight" : "125lbs",
+        "goalStatus" : "Incomplete"
+    }
+],
+
+[
+    {
+        "distanceMeasurement" : "miles",
+        "timeMeasurement" : "seconds",
+        "doesVibrate" : false,
+        "doesChime" : false
+    }
+]
+
+]
