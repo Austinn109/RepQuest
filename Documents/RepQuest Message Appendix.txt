@@ -1,0 +1,89 @@
+APPENDIX – MESSAGE DOCUMENTATION (RepQuest: Firebase Server + Database)
+
+System Description:
+RepQuest uses a Firebase Database and a Firebase Server.
+The client app sends JSON messages to the server, and the server reads/writes data to Firebase.
+Users earn EXP by completing workouts linked to their fitness goals.
+
+
+------------------------------------------------------------
+1. Get Goals
+Client → Server
+Endpoint: /api/goals
+Purpose: View current fitness goals.
+Response:
+[
+  {
+    "goalId": "G1",
+    "title": "Run 5 miles this week",
+    "progress": 3,
+    "target": 5,
+    "status": "in_progress"
+  }
+]
+
+------------------------------------------------------------
+2. Log Workout
+Client → Server
+Endpoint: /api/workouts
+Purpose: Add a new workout that counts toward a goal.
+Example:
+{
+  "userId": "U1",
+  "goalId": "G1",
+  "type": "Running",
+  "duration": 45,
+  "date": "2025-10-07"
+}
+Response:
+{
+  "workoutId": "W1",
+  "message": "Workout logged"
+}
+
+------------------------------------------------------------
+3. Gain EXP
+Client → Server
+Endpoint: /api/exp/add
+Purpose: Add EXP when a goal or workout is completed.
+Example:
+{
+  "userId": "U1",
+  "expGained": 50
+}
+Response:
+{
+  "totalExp": 450,
+  "message": "EXP added"
+}
+
+------------------------------------------------------------
+4. Database Layout
+users/
+  {userId}/
+    displayName
+    exp
+    totalWorkouts
+
+goals/
+  {goalId}/
+    userId
+    title
+    target
+    progress
+    status
+
+workouts/
+  {workoutId}/
+    userId
+    goalId
+    type
+    duration
+    date
+
+------------------------------------------------------------
+Summary:
+- All communication uses JSON.
+- The Firebase Server updates the Firebase Database.
+- Users earn EXP from completed workouts and achieved goals.
+- No Cloud Functions or Storage are used.
