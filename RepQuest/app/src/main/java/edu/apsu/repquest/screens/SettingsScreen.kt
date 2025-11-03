@@ -1,5 +1,6 @@
 package edu.apsu.repquest.screens
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,12 +14,11 @@ import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -28,17 +28,21 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import kotlin.math.exp
 
 @Composable
 fun SettingsScreen() {
-    var expanded by remember { mutableStateOf(false) }
-    var selectedOption by remember { mutableStateOf("") }
+    var selectedTimeOption by remember { mutableStateOf("") }
     val timeMeasureOptions = listOf("seconds", "minutes")
+
+    var selectedDistanceOption by remember { mutableStateOf("") }
+    val distanceMeasureOptions = listOf("Imperial", "Metric")
+
+    var vibrationsChecked by remember { mutableStateOf(true) }
+
+    var chimeChecked by remember { mutableStateOf(true) }
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -62,38 +66,135 @@ fun SettingsScreen() {
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
             )
-            OutlinedTextField(
-                value = selectedOption,
-                onValueChange = {},
-                readOnly = true,
-                trailingIcon = {
-                    IconButton(onClick = { expanded = true }) {
-                        Icon(
-                            imageVector = Icons.Default.ArrowDropDown,
-                            contentDescription = "Time"
-                        )
-                    }
-                },
-                colors = OutlinedTextFieldDefaults.colors(
-                    unfocusedContainerColor = Color.LightGray,
-                )
+            CustomDropdownMenu(
+                selectedOption = selectedTimeOption,
+                onOptionSelected = { selectedTimeOption = it },
+                options = timeMeasureOptions,
             )
-            DropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false }
+        }
+
+        Row(
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+        ) {
+            Text(
+                text = "Units of Measurement (Distance)",
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold
+            )
+            CustomDropdownMenu(
+                selectedOption = selectedDistanceOption,
+                onOptionSelected = { selectedDistanceOption = it },
+                options = distanceMeasureOptions
+            )
+        }
+
+        Row(
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+        ) {
+            Text(
+                text = "Vibrations",
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold
+            )
+            Switch(
+                checked = vibrationsChecked,
+                onCheckedChange = { vibrationsChecked = it }
+            )
+        }
+
+        Row(
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+        ) {
+            Text(
+                text = "Chime",
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold
+            )
+            Switch(
+                checked = chimeChecked,
+                onCheckedChange = { chimeChecked = it }
+            )
+        }
+
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Text(
+                text = "User Data:",
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold
+            )
+            Row(
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
             ) {
-                timeMeasureOptions.forEach { option ->
-                    DropdownMenuItem(
-                        text = { Text(option) },
-                        onClick = {
-                            selectedOption = option
-                            expanded = false
-                        }
-                    )
+                Button(
+                    onClick = { }
+                ) {
+                    Text(text = "Upload")
+                }
+                Button(
+                    onClick = { }
+                ) {
+                    Text(text = "Download")
                 }
             }
         }
     }
 }
 
-/* TODO: Create custom dropdown composable */
+
+@Composable
+fun CustomDropdownMenu(
+    selectedOption: String,
+    onOptionSelected: (String) -> Unit,
+    options: List<String>,
+    modifier: Modifier = Modifier
+) {
+    var expanded by remember { mutableStateOf(false) }
+
+    Box(modifier = modifier) {
+        OutlinedTextField(
+            value = selectedOption,
+            onValueChange = {},
+            readOnly = true,
+            trailingIcon = {
+                IconButton(onClick = { expanded = true }) {
+                    Icon(
+                        imageVector = Icons.Default.ArrowDropDown,
+                        contentDescription = "Dropdown"
+                    )
+                }
+            },
+            colors = OutlinedTextFieldDefaults.colors(
+                unfocusedContainerColor = Color.LightGray,
+            )
+        )
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            options.forEach { option ->
+                DropdownMenuItem(
+                    text = { Text(option) },
+                    onClick = {
+                        onOptionSelected(option)
+                        expanded = false
+                    }
+                )
+            }
+        }
+    }
+}
