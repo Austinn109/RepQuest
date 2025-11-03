@@ -13,9 +13,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import edu.apsu.repquest.navigation.NavigationDestination
 
 @Composable
-fun WorkoutScreen() {
+fun WorkoutScreen(
+    onCreateWorkoutClick: () -> Unit
+) {
+
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -30,7 +37,7 @@ fun WorkoutScreen() {
         Spacer(modifier = Modifier.size(16.dp))
         Button(
             onClick = {
-
+                onCreateWorkoutClick()
             }
         ) {
             Text(

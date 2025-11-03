@@ -10,6 +10,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import edu.apsu.repquest.navigation.NavigationDestination
+import edu.apsu.repquest.screens.CreateWorkout
 import edu.apsu.repquest.screens.GoalsScreen
 import edu.apsu.repquest.screens.HistoryScreen
 import edu.apsu.repquest.screens.SettingsScreen
@@ -29,8 +30,9 @@ fun RepQuestApp() {
                     selected = currentRoute == destination.route,
                     onClick = {
                         navController.navigate(destination.route) {
-                            popUpTo(navController.graph.startDestinationId) {
+                            popUpTo(0) {
                                 saveState = true
+                                inclusive = true
                             }
                             launchSingleTop = true
                             restoreState = true
@@ -54,7 +56,14 @@ fun RepQuestApp() {
             startDestination = NavigationDestination.Workout.route
         ) {
             composable(NavigationDestination.Workout.route) {
-                WorkoutScreen()
+                WorkoutScreen(
+                    onCreateWorkoutClick = {
+                        navController.navigate("createWorkout")
+                    }
+                )
+            }
+            composable("createWorkout") {
+                CreateWorkout()
             }
             composable(NavigationDestination.History.route) {
                 HistoryScreen()
