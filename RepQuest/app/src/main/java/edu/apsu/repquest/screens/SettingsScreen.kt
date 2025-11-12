@@ -1,5 +1,6 @@
 package edu.apsu.repquest.screens
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -34,10 +35,10 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun SettingsScreen() {
-    var selectedTimeOption by remember { mutableStateOf("") }
+    var selectedTimeOption by remember { mutableStateOf(DataManager.timeOption) }
     val timeMeasureOptions = listOf("seconds", "minutes")
 
-    var selectedDistanceOption by remember { mutableStateOf("") }
+    var selectedDistanceOption by remember { mutableStateOf(DataManager.measurementOption) }
     val distanceMeasureOptions = listOf("Imperial", "Metric")
 
     var vibrationsChecked by remember { mutableStateOf(true) }
@@ -104,7 +105,10 @@ fun SettingsScreen() {
             )
             Switch(
                 checked = vibrationsChecked,
-                onCheckedChange = { vibrationsChecked = it }
+                onCheckedChange = { vibrationsChecked = it
+                DataManager.vibrationsToggle = vibrationsChecked
+                    //Updates to the DataManager
+                Log.d("DataUpdate", "Vibration toggle: ${DataManager.vibrationsToggle}")}
             )
         }
 
@@ -121,7 +125,10 @@ fun SettingsScreen() {
             )
             Switch(
                 checked = chimeChecked,
-                onCheckedChange = { chimeChecked = it }
+                onCheckedChange = { chimeChecked = it
+                DataManager.chimeToggle = chimeChecked
+                    Log.d("DataUpdate", "Chime toggle: ${DataManager.chimeToggle}")}
+
             )
         }
 
@@ -141,12 +148,12 @@ fun SettingsScreen() {
                     .padding(16.dp)
             ) {
                 Button(
-                    onClick = { }
+                    onClick = { DataManager.exportSettings() }
                 ) {
                     Text(text = "Upload")
                 }
                 Button(
-                    onClick = { }
+                    onClick = { DataManager.exportSettings() }
                 ) {
                     Text(text = "Download")
                 }
@@ -190,6 +197,7 @@ fun CustomDropdownMenu(
                 DropdownMenuItem(
                     text = { Text(option) },
                     onClick = {
+                        DataManager.updateSettingsDropDown(option)
                         onOptionSelected(option)
                         expanded = false
                     }
