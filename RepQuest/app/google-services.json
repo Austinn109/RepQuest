@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "812983274437",
+    "project_id": "repquest-test",
+    "storage_bucket": "repquest-test.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:812983274437:android:a9597777a789004100d9ac",
+        "android_client_info": {
+          "package_name": "com.example.repquesttest"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJMG-ioC4guyDdiuj9o9ktg1eGQcdUqbo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

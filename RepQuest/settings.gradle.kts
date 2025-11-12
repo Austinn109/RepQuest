@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "RepQuest"
+rootProject.name = "RepQuest Test"
 include(":app")
  

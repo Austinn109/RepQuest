@@ -1,4 +1,4 @@
-package edu.apsu.repquest
+package com.example.repquesttest
 
 import org.junit.Test
 

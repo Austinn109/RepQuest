@@ -1,4 +1,4 @@
-package edu.apsu.repquest.ui.theme
+package com.example.repquesttest.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
