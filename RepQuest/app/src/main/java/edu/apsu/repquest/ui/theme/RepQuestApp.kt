@@ -69,7 +69,9 @@ fun RepQuestApp() {
                 )
             }
             composable("createWorkout") {
-                CreateWorkout()
+                CreateWorkout(onNavigateBack = {
+                    navController.popBackStack()
+                })
             }
             composable(
                 route = "workoutDetail/{workoutId}",
