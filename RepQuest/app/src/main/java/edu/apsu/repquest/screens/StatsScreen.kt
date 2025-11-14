@@ -43,5 +43,23 @@ fun StatsScreen() {
             Text(text = "Incremental", fontWeight = FontWeight.Bold, fontSize = 14.sp)
             Text(text = "Rest", fontWeight = FontWeight.Bold, fontSize = 14.sp)
         }
+        Spacer(modifier = Modifier.size(16.dp))
+
+        // Data Row under headers
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.spacedBy(64.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(text = "Push Ups", fontSize = 14.sp)
+            Text(text = "Reps", fontSize = 14.sp)
+            Text(text = "30", fontSize = 14.sp)
+            Text(text = "+5", fontSize = 14.sp)
+            Text(text = "60s", fontSize = 14.sp)
+        }
+
+
     }
 }

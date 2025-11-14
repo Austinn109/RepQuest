@@ -32,6 +32,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import edu.apsu.repquest.dataclasses.Exercise
 
 @Composable
 fun SettingsScreen() {
@@ -63,7 +64,7 @@ fun SettingsScreen() {
                 .padding(16.dp)
         ) {
             Text(
-                text = "Units of Measurement (Time)",
+                text = "Time Measurement",
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
             )
@@ -81,7 +82,7 @@ fun SettingsScreen() {
                 .padding(16.dp)
         ) {
             Text(
-                text = "Units of Measurement (Distance)",
+                text = "Measurement System",
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold
             )
@@ -153,7 +154,7 @@ fun SettingsScreen() {
                     Text(text = "Upload")
                 }
                 Button(
-                    onClick = { DataManager.exportSettings() }
+                    onClick = { DataManager.exportSettings()}
                 ) {
                     Text(text = "Download")
                 }

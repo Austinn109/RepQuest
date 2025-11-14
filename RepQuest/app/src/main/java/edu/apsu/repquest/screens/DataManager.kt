@@ -1,12 +1,15 @@
 package edu.apsu.repquest.screens
 
 import android.util.Log
+import edu.apsu.repquest.dataclasses.Workout
 
 object DataManager{
     var timeOption: String = "seconds"
     var measurementOption: String = "Imperial"
     var chimeToggle: Boolean = true
     var vibrationsToggle: Boolean = true
+
+    var userWorkouts: MutableList<Workout> = mutableListOf()
 
 
     fun updateSettingsDropDown(option: String){
@@ -18,6 +21,10 @@ object DataManager{
             measurementOption = option
             Log.d("DataUpdate", "Measurements updated to " + measurementOption)
         }
+    }
+
+    fun addUserWorkout(workout: Workout){
+        userWorkouts.add(workout)
     }
 
     fun exportSettings(){
