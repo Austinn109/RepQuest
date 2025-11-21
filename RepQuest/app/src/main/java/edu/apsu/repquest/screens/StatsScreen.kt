@@ -1,14 +1,9 @@
 package edu.apsu.repquest.screens
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -19,47 +14,48 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun StatsScreen() {
+    val headers = listOf("Exercise Name", "Unit Comp", "Amount", "Increment", "Rest")
+    val data = listOf("Push Ups but with a really long title", "Reps", "30", "+5", "60s")
+
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Spacer(modifier = Modifier.size(64.dp))
-        Text(
-            text = "Statistics",
-            fontSize = 32.sp,
-            fontWeight = FontWeight.Bold,
-        )
+        Spacer(modifier = Modifier.size(32.dp))
+        Text("Statistics", fontSize = 32.sp, fontWeight = FontWeight.Bold)
+        Spacer(modifier = Modifier.size(32.dp))
 
-        Spacer(modifier = Modifier.size(64.dp))
-        Row(
+        // Header row
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(headers.size),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(),
-            horizontalArrangement = Arrangement.SpaceEvenly,
+                .padding(8.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Text(text = "Exercise Name", fontWeight = FontWeight.Bold, fontSize = 14.sp)
-            Text(text = "Unit Comp", fontWeight = FontWeight.Bold, fontSize = 14.sp)
-            Text(text = "Amount", fontWeight = FontWeight.Bold, fontSize = 14.sp)
-            Text(text = "Incremental", fontWeight = FontWeight.Bold, fontSize = 14.sp)
-            Text(text = "Rest", fontWeight = FontWeight.Bold, fontSize = 14.sp)
+            items(headers) { header ->
+                Text(
+                    text = header,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 14.sp
+                )
+            }
         }
+
         Spacer(modifier = Modifier.size(16.dp))
 
-        // Data Row under headers
-        Row(
+        // Data row
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(data.size),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-            horizontalArrangement = Arrangement.spacedBy(64.dp),
-            verticalAlignment = Alignment.CenterVertically
+                .padding(8.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            //verticalArrangement = Arrangement.Center
         ) {
-            Text(text = "Push Ups", fontSize = 14.sp)
-            Text(text = "Reps", fontSize = 14.sp)
-            Text(text = "30", fontSize = 14.sp)
-            Text(text = "+5", fontSize = 14.sp)
-            Text(text = "60s", fontSize = 14.sp)
+            items(data) { value ->
+                Text(text = value, fontSize = 14.sp)
+            }
         }
-
-
     }
 }

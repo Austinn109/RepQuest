@@ -1,5 +1,6 @@
 package edu.apsu.repquest.screens
 
+import android.util.Log
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.waitForUpOrCancellation
@@ -81,7 +82,13 @@ fun DatePickerFieldToModal(modifier: Modifier = Modifier) {
 
     if (showModal) {
         DatePickerModal(
-            onDateSelected = { selectedDate = it },
+            onDateSelected = { selectedDate = it
+                if (selectedDate !=null){
+                    var selectedDateNotNull: Long = selectedDate!!
+                    Log.d("Date", "Selected date: ${convertMillisToDate(selectedDateNotNull)}")
+                    //Implement Date selector
+                }
+            },
             onDismiss = { showModal = false }
         )
     }
