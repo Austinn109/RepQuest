@@ -15,19 +15,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import java.util.UUID
-
-data class FitnessGoal(
-    val id: String = UUID.randomUUID().toString(),
-    val name: String,
-    val targetValue: String,
-    val currentValue: String
-)
+import edu.apsu.repquest.dataclasses.Goals
 
 @Composable
 fun GoalsScreen() {
-    val goals = remember { mutableStateListOf<FitnessGoal>() }
+    val goals = remember { mutableStateListOf<Goals>() }
     var showCreateDialog by remember { mutableStateOf(false) }
+    var totalXP by remember { mutableIntStateOf(0) }
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -35,6 +29,36 @@ fun GoalsScreen() {
     ) {
         Spacer(modifier = Modifier.size(64.dp))
         Text("Goals", fontSize = 32.sp, fontWeight = FontWeight.Bold)
+
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 8.dp),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
+
+        ){
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(16.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ){
+                Text(
+                    "Total XP: $totalXP",
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    "Level: ${totalXP / 100}",
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold
+                )
+
+            }
+        }
+
+
         Spacer(modifier = Modifier.size(16.dp))
         Button(onClick = { showCreateDialog = true }) {
             Text("Create A Goal")
@@ -50,11 +74,36 @@ fun GoalsScreen() {
                     goal = goal,
                     onUpdate = { newCurrent ->
                         val index = goals.indexOfFirst { it.id == goal.id }
-                        if (index != -1) goals[index] = goal.copy(currentValue = newCurrent)
+                        if (index != -1) {
+                            val oldGoal = goals[index]
+                            val current = newCurrent.toFloatOrNull() ?: 0f
+                            val target = oldGoal.targetValue.toFloatOrNull() ?: 1f
+                            
+                            if (current >= target && !oldGoal.isCompleted) {
+                                //awarded 50 xp for achieving a goal
+                                val xpReward = 50
+                                totalXP += xpReward
+                                goals[index] = oldGoal.copy(
+                                    currentValue = newCurrent,
+                                    isCompleted = true,
+                                    xpAwarded = xpReward
+                                )
+                            } else {
+                                goals[index] = oldGoal.copy(currentValue = newCurrent)
+                            }
+                        }
                     },
                     onEdit = { newName, newTarget ->
                         val index = goals.indexOfFirst { it.id == goal.id }
-                        if (index != -1) goals[index] = goal.copy(name = newName, targetValue = newTarget)
+                        if (index != -1) {
+                            val oldGoal = goals[index]
+                            goals[index] = oldGoal.copy(
+                                name = newName,
+                                targetValue = newTarget,
+                                isCompleted = false,
+                                xpAwarded = 0
+                            )
+                        }
                     },
                     onDelete = { goals.remove(goal) }
                 )
@@ -69,7 +118,7 @@ fun GoalsScreen() {
             initialTarget = "",
             onDismiss = { showCreateDialog = false },
             onConfirm = { name, target ->
-                goals.add(FitnessGoal(name = name, targetValue = target, currentValue = "0"))
+                goals.add(Goals(name = name, targetValue = target, currentValue = "0"))
                 showCreateDialog = false
             }
         )
@@ -78,7 +127,7 @@ fun GoalsScreen() {
 
 @Composable
 fun GoalCard(
-    goal: FitnessGoal,
+    goal: Goals,
     onUpdate: (String) -> Unit,
     onEdit: (String, String) -> Unit,
     onDelete: () -> Unit
@@ -95,7 +144,12 @@ fun GoalCard(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp),
-        elevation = CardDefaults.cardElevation(2.dp)
+        elevation = CardDefaults.cardElevation(2.dp),
+        colors = if (goal.isCompleted) {
+            CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
+        } else {
+            CardDefaults.cardColors()
+        }
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Row(
@@ -103,7 +157,17 @@ fun GoalCard(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(goal.name, fontSize = 20.sp, fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(goal.name, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                    if (goal.isCompleted) {
+                        Text(
+                            "Completed! +${goal.xpAwarded} XP",
+                            fontSize = 12.sp,
+                            color = MaterialTheme.colorScheme.primary,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
                 IconButton(onClick = { showUpdateDialog = true }) {
                     Icon(Icons.Default.Add, "Update")
                 }
@@ -122,7 +186,9 @@ fun GoalCard(
             }
             Spacer(modifier = Modifier.size(8.dp))
             LinearProgressIndicator(progress = { progress }, modifier = Modifier.fillMaxWidth())
-            Text("${(progress * 100).toInt()}% Complete", fontSize = 12.sp, modifier = Modifier.padding(top = 4.dp))
+
+            Text("${(progress * 100).toInt()}% Complete",
+                fontSize = 12.sp, modifier = Modifier.padding(top = 4.dp))
         }
     }
 
@@ -147,7 +213,8 @@ fun GoalCard(
                     }
                 }) { Text("Update") }
             },
-            dismissButton = { TextButton(onClick = { showUpdateDialog = false }) { Text("Cancel") } }
+            dismissButton = { TextButton(onClick =
+                { showUpdateDialog = false }) { Text("Cancel") } }
         )
     }
 
@@ -222,7 +289,6 @@ fun GoalDialog(
         dismissButton = { TextButton(onClick = onDismiss) { Text("Cancel") } }
     )
 }
-
 
 
 /*
