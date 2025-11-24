@@ -34,7 +34,8 @@ import androidx.compose.material3.Button
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateWorkout(
-    onNavigateBack: () -> Unit
+    onNavigateBack: () -> Unit,
+    onCreateExerciseClick: () -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -69,7 +70,7 @@ fun CreateWorkout(
             }
 
             Button(
-                onClick = {  },
+                onClick = { onCreateExerciseClick() },
                 modifier = Modifier.size(50.dp),
                 shape = CircleShape,
                 contentPadding = PaddingValues(0.dp)

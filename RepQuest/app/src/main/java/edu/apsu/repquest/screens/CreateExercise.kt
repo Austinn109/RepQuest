@@ -30,6 +30,6 @@ fun CreateExercise (
             )
         }
     ) { paddingValues ->
-        
+
     }
 }
