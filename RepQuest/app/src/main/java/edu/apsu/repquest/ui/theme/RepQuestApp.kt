@@ -12,6 +12,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import edu.apsu.repquest.navigation.NavigationDestination
+import edu.apsu.repquest.screens.CreateExercise
 import edu.apsu.repquest.screens.CreateWorkout
 import edu.apsu.repquest.screens.GoalsScreen
 import edu.apsu.repquest.screens.HistoryScreen
@@ -69,7 +70,14 @@ fun RepQuestApp() {
                 )
             }
             composable("createWorkout") {
-                CreateWorkout()
+                CreateWorkout(onNavigateBack = {
+                    navController.popBackStack()
+                },
+                    onCreateExerciseClick = { navController.navigate("createExercise") }
+                )
+            }
+            composable("createExercise") {
+                CreateExercise(onNavigateBack = { navController.popBackStack() })
             }
             composable(
                 route = "workoutDetail/{workoutId}",
