@@ -170,6 +170,16 @@ fun SettingsScreen() {
                                 )
                             )
                         )
+                        DataManager.addUserWorkout(Workout(
+                            id = "pull_day",
+                            workoutName = "Pull Day",
+                            exercises = listOf(
+                                Exercise(exerciseName = "Deadlift", sets = 1, reps = 5, weight = 225.0),
+                                Exercise(exerciseName = "Pull-ups", sets = 4, reps = 10, weight = 15.0),
+                                Exercise(exerciseName = "Barbell Row", sets = 5, reps = 5, weight = 135.0),
+                                Exercise(exerciseName = "Curls", sets = 3, reps = 12, weight = 95.0),
+                            )
+                        ))
                     }
                 ) {
                     Text(text = "Download")
