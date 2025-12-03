@@ -33,6 +33,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import edu.apsu.repquest.dataclasses.Exercise
+import edu.apsu.repquest.dataclasses.Workout
 
 @Composable
 fun SettingsScreen() {
@@ -154,7 +155,22 @@ fun SettingsScreen() {
                     Text(text = "Upload")
                 }
                 Button(
-                    onClick = { DataManager.exportSettings()}
+                    onClick = {
+                    // DataManager.exportSettings()
+                        DataManager.addUserWorkout(
+                            Workout(
+                            id = "push_day",
+                            workoutName = "Push Day",
+                            exercises = listOf(
+                                Exercise(exerciseName = "Bench Press", sets = 3, reps = 10, weight = 135.0),
+                                Exercise(exerciseName = "Overhead Press", sets = 3, reps = 8, weight = 95.0),
+                                Exercise(exerciseName = "Dumbbell Flyes", sets = 3, reps = 12, weight = 50.0),
+                                Exercise(exerciseName = "Dips", sets = 3, reps = 10, weight = 35.0),
+                                Exercise(exerciseName = "Do work", sets = 7, reps = 12, weight = 19999.0)
+                                )
+                            )
+                        )
+                    }
                 ) {
                     Text(text = "Download")
                 }

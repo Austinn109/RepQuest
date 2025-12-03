@@ -37,9 +37,11 @@ fun WorkoutScreen(
     onWorkoutClick: (String) -> Unit
 ) {
     // Sample Workout Data. DELETE Later
-    DataManager.load()
+    //DataManager.load()
     val sampleWorkouts = remember {
+
         listOf(
+
             Workout(
                 id = "push_day",
                 workoutName = "Push Day",
@@ -61,7 +63,11 @@ fun WorkoutScreen(
                 )
             )
         )
+
+
     }
+
+    val realWorkouts = DataManager.userWorkouts
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -90,7 +96,7 @@ fun WorkoutScreen(
             modifier = Modifier.fillMaxSize(),
             contentPadding = PaddingValues(bottom = 16.dp)
         ) {
-            items(sampleWorkouts) { workout ->
+            items(realWorkouts) { workout ->
                 WorkoutCard(
                     workout = workout,
                     onClick = { onWorkoutClick(workout.id) }

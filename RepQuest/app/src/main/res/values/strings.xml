@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">RepQuest</string>
+    <string name="systemOfMeasurement">lbs</string>
+    <string name="timeMeasurement">seconds</string>
 </resources>

@@ -11,11 +11,30 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import edu.apsu.repquest.dataclasses.Exercise
 
 @Composable
 fun StatsScreen() {
-    val headers = listOf("Exercise Name", "Unit Comp", "Amount", "Increment", "Rest")
-    val data = listOf("Push Ups but with a really long title", "Reps", "30", "+5", "60s")
+    val headers = listOf("Exercise Name", "Unit Comp", "Amount", "Rest")
+
+    val data = listOf("Push Ups but with a really long title", "Reps", "30", "60s")
+
+    /*
+    Code to try and extract all exercises from all workouts and mitigate duplicates
+
+    val workouts = DataManager.userWorkouts
+    val dataList = ArrayList<List<String>>()
+    for (workout in workouts){
+        for(exercise in workout.exercises){
+            for(i in 0 ..<workout.exercises.size){
+                if(exercise.exerciseName.equals(workout.exercises[i].exerciseName)){
+                    return
+                }else{
+                    dataList.add(listOf("${workout.exercises[i].exerciseName}"))
+                }
+            }
+        }
+    } */
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -56,6 +75,19 @@ fun StatsScreen() {
             items(data) { value ->
                 Text(text = value, fontSize = 14.sp)
             }
+
+            /*
+
+            Code to try and put the combined list of exercises on screen. Moves whole screen
+            and you can't see anything anymore
+
+            for (dataEntry in dataList){
+                items(dataEntry) { value ->
+                    Text(text = value, fontSize = 14.sp)
+                }
+            }
+            */
+
         }
     }
 }

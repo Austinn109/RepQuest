@@ -1,5 +1,6 @@
 package edu.apsu.repquest.screens
 
+import android.util.Log
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -44,17 +45,22 @@ import androidx.compose.ui.unit.sp
 import edu.apsu.repquest.dataclasses.Exercise
 import edu.apsu.repquest.dataclasses.Workout
 
+lateinit var realWorkoutID: String
+lateinit var currentWorkout: Workout
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WorkoutDetailScreen(
     workoutId: String,
     onNavigateBack: () -> Unit
 ) {
+    Log.d("Workout", "Workout id is ${workoutId}")
+    realWorkoutID = workoutId
+    currentWorkout = DataManager.findWorkout(realWorkoutID)!!
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Workout Name") },
+                title = { Text(currentWorkout.workoutName) },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
                         Icon(
@@ -73,7 +79,9 @@ fun WorkoutDetailScreen(
                 .padding(paddingValues)
         ) {
             item {
-                exerciseTracker()
+                for (exercise in currentWorkout.exercises){
+                    exerciseTracker(exercise)
+                }
             }
         }
     }
@@ -81,7 +89,7 @@ fun WorkoutDetailScreen(
 
 @Composable
 fun exerciseTracker(
-    workoutId: String = "",
+    exercise: Exercise,
     modifier: Modifier = Modifier,
     activeColor: Color = Color.Blue,
     inactiveColor: Color = Color.White,
@@ -89,8 +97,8 @@ fun exerciseTracker(
     activeTextColor: Color = Color.White,
 ) {
     // Placeholder values for all exercise data. Replace to calls to DB using workoutId
-    var initialCount = 5
-    var weight by remember { mutableStateOf("") }
+    var initialCount = exercise.reps
+    var weight by remember { mutableStateOf("${exercise.weight}") }
 
     Card(
         modifier = Modifier
@@ -110,16 +118,17 @@ fun exerciseTracker(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
-                    text = "Exercise Name",
+                    text = exercise.exerciseName,
                     textAlign = TextAlign.Left,
                     fontWeight = FontWeight.Bold,
                 )
 
                 TextField(
                     modifier = Modifier
-                        .width(100.dp),
+                        .width(125.dp),
                     value = weight,
                     onValueChange = {weight = it},
+                    //label = {Text("${weight} ${DataManager.getSystemOfMeasurement()}")},
                 )
             }
 
@@ -130,7 +139,7 @@ fun exerciseTracker(
                 horizontalArrangement = Arrangement.SpaceEvenly,
             ) {
                 // for the number of sets of exercise
-                for (i in 1..5) {
+                for (i in 1..exercise.sets) {
                     var currentCount by remember { mutableStateOf(initialCount) }
                     var isActive by remember { mutableStateOf(false) }
 

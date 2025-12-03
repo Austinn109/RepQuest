@@ -30,13 +30,40 @@ object DataManager{
         userWorkouts.add(workout)
     }
 
+    fun findWorkout(id: String): Workout? {
+
+        for (i in 0..<userWorkouts.size){
+            if(userWorkouts[i].id == id){
+                return userWorkouts[i]
+            }
+        }
+
+        //It shouldn't get here
+        return null
+
+    }
+
+    fun getSystemOfMeasurement() : String{
+        if (measurementOption.equals("Imperial"))
+            return "lbs"
+
+        return "kgs"
+    }
+
+    fun getTimeMeasurement() : String{
+        if (timeOption.equals("seconds"))
+            return "secs"
+        return "mins"
+    }
+
     fun export(context: Context){
         exportSettings()
+        exportWorkouts(context)
 
     }
 
 
-    private fun exportWorkouts(context: Any) {
+    private fun exportWorkouts(context: Context) {
 
 
 
