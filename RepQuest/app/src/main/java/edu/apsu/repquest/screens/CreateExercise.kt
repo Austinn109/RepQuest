@@ -1,10 +1,13 @@
 package edu.apsu.repquest.screens
 
+import android.view.RoundedCorner
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -23,6 +26,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -102,16 +106,72 @@ fun CreateExercise (
             // Reps
             if (selectedUnitOfCompletion == unitOfCompletionOptions[0]) {
                 Column(
-
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
                         horizontalArrangement = Arrangement.SpaceEvenly,
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Text(
                             text = "Reps:",
                             fontWeight = FontWeight.Bold,
+                            fontSize = 20.sp,
                         )
-                        
+
+                        var reps by remember { mutableStateOf("") }
+                        TextField(
+                            value = reps,
+                            onValueChange = { reps = it },
+                            shape = RoundedCornerShape(50.dp)
+                        )
+                    }
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        horizontalArrangement = Arrangement.SpaceEvenly,
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Text(
+                            text = "Sets:",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 20.sp,
+                        )
+
+                        var sets by remember { mutableStateOf("") }
+                        TextField(
+                            value = sets,
+                            onValueChange = { sets = it },
+                            shape = RoundedCornerShape(50.dp)
+                        )
+                    }
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        horizontalArrangement = Arrangement.SpaceEvenly,
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Text(
+                            text = "Weight:",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 20.sp,
+                        )
+
+                        var weight by remember { mutableStateOf("") }
+                        TextField(
+                            value = weight,
+                            onValueChange = { weight = it },
+                            shape = RoundedCornerShape(50.dp)
+                        )
                     }
                 }
             }
