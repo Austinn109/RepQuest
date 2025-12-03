@@ -37,6 +37,7 @@ fun WorkoutScreen(
     onWorkoutClick: (String) -> Unit
 ) {
     // Sample Workout Data. DELETE Later
+    DataManager.load()
     val sampleWorkouts = remember {
         listOf(
             Workout(
