@@ -6,6 +6,7 @@ data class Exercise(
     val sets: Int,
     val reps: Int,
     val weight: Double,
+    val increment: Double = 0.0,
     val restTime: Int = 60,
     val notes: String = ""
 )

@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -174,6 +175,97 @@ fun CreateExercise (
                         )
                     }
                 }
+            } else if (selectedUnitOfCompletion == unitOfCompletionOptions[1]) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    horizontalArrangement = Arrangement.SpaceEvenly,
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        text = "Distance:",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp,
+                    )
+
+                    var distance by remember { mutableStateOf("") }
+                    TextField(
+                        value = distance,
+                        onValueChange = { distance = it },
+                        shape = RoundedCornerShape(50.dp)
+                    )
+                }
+            } else if (selectedUnitOfCompletion == unitOfCompletionOptions[2]) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    horizontalArrangement = Arrangement.SpaceEvenly,
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        text = "Sets:",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp,
+                    )
+
+                    var sets by remember { mutableStateOf("") }
+                    TextField(
+                        value = sets,
+                        onValueChange = { sets = it },
+                        shape = RoundedCornerShape(50.dp)
+                    )
+                }
+            }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    text = "Increment:",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp,
+                )
+
+                var increment by remember { mutableStateOf("") }
+                TextField(
+                    value = increment,
+                    onValueChange = { increment = it },
+                    shape = RoundedCornerShape(50.dp)
+                )
+            }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    text = "Rest Time:",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp,
+                )
+
+                var restTime by remember { mutableStateOf("") }
+                TextField(
+                    value = restTime,
+                    onValueChange = { restTime = it },
+                    shape = RoundedCornerShape(50.dp)
+                )
+            }
+
+            Button(
+                onClick = {},
+
+            ) {
+                Text(text = "Done")
             }
         }
     }
