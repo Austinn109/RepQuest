@@ -17,6 +17,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -47,6 +48,7 @@ fun CreateWorkout(
     onNavigateBack: () -> Unit,
     onCreateExerciseClick: () -> Unit,
     onDeleteExercise: (Exercise) -> Unit,
+    onSaveWorkout: (String, List<Exercise>) -> Unit,
 ) {
     var workoutName by remember { mutableStateOf("") }
 
@@ -79,13 +81,27 @@ fun CreateWorkout(
                 .padding(paddingValues)
                 .padding(16.dp)
         ) {
-            // Workout Name Input
-            Text(
-                text = "Workout Name",
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    text = "Workout Name",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(bottom = 8.dp)
+                )
+
+                Button(
+                    onClick = { onSaveWorkout(workoutName, exercises) },
+                    enabled = (workoutName != "" && !exercises.isEmpty())
+                ) {
+                    Text(text = "Save")
+                }
+            }
 
             OutlinedTextField(
                 value = workoutName,
@@ -97,7 +113,7 @@ fun CreateWorkout(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Section Header
+
             Text(
                 text = "Exercises",
                 style = MaterialTheme.typography.titleMedium,
@@ -105,9 +121,9 @@ fun CreateWorkout(
                 modifier = Modifier.padding(bottom = 8.dp)
             )
 
-            // Exercise List
+
             if (exercises.isEmpty()) {
-                // Empty state
+
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()

@@ -15,6 +15,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import edu.apsu.repquest.dataclasses.Exercise
+import edu.apsu.repquest.dataclasses.Workout
 import edu.apsu.repquest.navigation.NavigationDestination
 import edu.apsu.repquest.screens.CreateExercise
 import edu.apsu.repquest.screens.CreateWorkout
@@ -24,6 +25,8 @@ import edu.apsu.repquest.screens.SettingsScreen
 import edu.apsu.repquest.screens.StatsScreen
 import edu.apsu.repquest.screens.WorkoutDetailScreen
 import edu.apsu.repquest.screens.WorkoutScreen
+import java.time.LocalDateTime
+
 
 @Composable
 fun RepQuestApp() {
@@ -32,6 +35,7 @@ fun RepQuestApp() {
     val currentRoute = navBackStackEntry?.destination?.route
 
     var pendingExercises by remember { mutableStateOf<List<Exercise>>(emptyList()) }
+    var savedWorkouts by remember { mutableStateOf<List<Workout>>(emptyList())}
 
     NavigationSuiteScaffold(
         navigationSuiteItems = {
@@ -67,6 +71,7 @@ fun RepQuestApp() {
         ) {
             composable(NavigationDestination.Workout.route) {
                 WorkoutScreen(
+                    workouts = savedWorkouts,
                     onCreateWorkoutClick = {
                         pendingExercises = emptyList()
                         navController.navigate("createWorkout")
@@ -83,6 +88,16 @@ fun RepQuestApp() {
                     onCreateExerciseClick = { navController.navigate("createExercise") },
                     onDeleteExercise = { exercise ->
                         pendingExercises = pendingExercises.filter { it != exercise }
+                    },
+                    onSaveWorkout = { workoutName, exercises ->
+                        val newWorkout = Workout(
+                            id = LocalDateTime.now().toString(),
+                            workoutName = workoutName,
+                            exercises = exercises,
+                        )
+                        savedWorkouts = savedWorkouts + newWorkout
+                        pendingExercises = emptyList()
+                        navController.popBackStack()
                     }
                 )
             }

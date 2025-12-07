@@ -33,34 +33,10 @@ import edu.apsu.repquest.navigation.NavigationDestination
 
 @Composable
 fun WorkoutScreen(
+    workouts: List<Workout>,
     onCreateWorkoutClick: () -> Unit,
     onWorkoutClick: (String) -> Unit
 ) {
-    // Sample Workout Data. DELETE Later
-    val sampleWorkouts = remember {
-        listOf(
-            Workout(
-                id = "push_day",
-                workoutName = "Push Day",
-                exercises = listOf(
-                    Exercise(exerciseName = "Bench Press", sets = 3, reps = 10, weight = 135.0),
-                    Exercise(exerciseName = "Overhead Press", sets = 3, reps = 8, weight = 95.0),
-                    Exercise(exerciseName = "Dumbbell Flyes", sets = 3, reps = 12, weight = 50.0),
-                    Exercise(exerciseName = "Dips", sets = 3, reps = 10, weight = 35.0),
-                )
-            ),
-            Workout(
-                id = "pull_day",
-                workoutName = "Pull Day",
-                exercises = listOf(
-                    Exercise(exerciseName = "Deadlift", sets = 1, reps = 5, weight = 225.0),
-                    Exercise(exerciseName = "Pull-ups", sets = 4, reps = 10, weight = 15.0),
-                    Exercise(exerciseName = "Barbell Row", sets = 5, reps = 5, weight = 135.0),
-                    Exercise(exerciseName = "Curls", sets = 3, reps = 12, weight = 95.0),
-                )
-            )
-        )
-    }
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -89,7 +65,7 @@ fun WorkoutScreen(
             modifier = Modifier.fillMaxSize(),
             contentPadding = PaddingValues(bottom = 16.dp)
         ) {
-            items(sampleWorkouts) { workout ->
+            items(workouts) { workout ->
                 WorkoutCard(
                     workout = workout,
                     onClick = { onWorkoutClick(workout.id) }
