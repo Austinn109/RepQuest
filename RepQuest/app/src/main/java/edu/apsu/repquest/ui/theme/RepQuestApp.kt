@@ -116,8 +116,9 @@ fun RepQuestApp() {
             ) {
                 backStackEntry ->
                 val workoutId = backStackEntry.arguments?.getString("workoutId") ?: ""
+                val workout = savedWorkouts.find { it.id == workoutId }
                 WorkoutDetailScreen(
-                    workoutId = workoutId,
+                    workout = workout,
                     onNavigateBack = {
                         navController.popBackStack()
                     }

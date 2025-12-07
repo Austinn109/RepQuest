@@ -14,7 +14,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
@@ -39,6 +42,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -48,14 +52,14 @@ import edu.apsu.repquest.dataclasses.Workout
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WorkoutDetailScreen(
-    workoutId: String,
+    workout: Workout?,
     onNavigateBack: () -> Unit
 ) {
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Workout Name") },
+                title = { Text("Workout Detail") },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
                         Icon(
@@ -67,14 +71,25 @@ fun WorkoutDetailScreen(
             )
         }
     ) { paddingValues ->
-        LazyColumn(
-            contentPadding = PaddingValues(bottom = 16.dp),
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-        ) {
-            item {
-                exerciseTracker()
+        if (workout == null) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+                    .padding(16.dp)
+            ) {
+                Text(text = "Workout not found")
+            }
+        } else {
+            LazyColumn(
+                contentPadding = PaddingValues(bottom = 16.dp),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues),
+            ) {
+                items(workout.exercises) { exercise ->
+                    exerciseTracker(exercise = exercise)
+                }
             }
         }
     }
@@ -82,7 +97,7 @@ fun WorkoutDetailScreen(
 
 @Composable
 fun exerciseTracker(
-    workoutId: String = "",
+    exercise: Exercise,
     modifier: Modifier = Modifier,
     activeColor: Color = Color.Blue,
     inactiveColor: Color = Color.White,
@@ -90,7 +105,7 @@ fun exerciseTracker(
     activeTextColor: Color = Color.White,
 ) {
     // Placeholder values for all exercise data. Replace to calls to DB using workoutId
-    var initialCount = 5
+    var initialCount = exercise.reps
     var weight by remember { mutableStateOf("") }
 
     Card(
@@ -111,17 +126,26 @@ fun exerciseTracker(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
-                    text = "Exercise Name",
+                    text = exercise.exerciseName,
                     textAlign = TextAlign.Left,
                     fontWeight = FontWeight.Bold,
+                    fontSize = 16.sp,
                 )
 
-                OutlinedTextField(
-                    modifier = Modifier
-                        .width(100.dp),
-                    value = weight,
-                    onValueChange = {weight = it},
+                Text(
+                    text = exercise.weight.toString() + " lbs",
                 )
+
+//                OutlinedTextField(
+//                    modifier = Modifier
+//                        .width(100.dp),
+//                    value = weight,
+//                    onValueChange = { weight = it },
+//                    singleLine = true,
+//                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+//                    shape = RoundedCornerShape(8.dp)
+//                )
+
             }
 
             // Button row
@@ -131,7 +155,7 @@ fun exerciseTracker(
                 horizontalArrangement = Arrangement.SpaceEvenly,
             ) {
                 // for the number of sets of exercise
-                for (i in 1..5) {
+                for (i in 1..exercise.sets) {
                     var currentCount by remember { mutableStateOf(initialCount) }
                     var isActive by remember { mutableStateOf(false) }
 
