@@ -119,9 +119,8 @@ fun RepQuestApp() {
                 val workout = savedWorkouts.find { it.id == workoutId }
                 WorkoutDetailScreen(
                     workout = workout,
-                    onNavigateBack = {
-                        navController.popBackStack()
-                    }
+                    onNavigateBack = { navController.popBackStack() },
+                    onFinishedWorkout = { navController.popBackStack() },
                 )
             }
             composable(NavigationDestination.History.route) {
