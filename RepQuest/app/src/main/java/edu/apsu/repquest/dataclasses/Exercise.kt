@@ -5,7 +5,7 @@ data class Exercise(
     val exerciseName: String,
     val sets: Int,
     val reps: Int,
-    val weight: Double,
+    var weight: Double,
     val increment: Double = 0.0,
     val restTime: Int = 60,
     val notes: String = ""

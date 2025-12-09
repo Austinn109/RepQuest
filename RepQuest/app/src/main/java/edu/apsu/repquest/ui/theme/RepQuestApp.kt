@@ -78,6 +78,9 @@ fun RepQuestApp() {
                     },
                     onWorkoutClick = { workoutId ->
                         navController.navigate("workoutDetail/$workoutId")
+                    },
+                    onDeleteWorkout = { workout ->
+                        savedWorkouts = savedWorkouts.filter { it != workout }
                     }
                 )
             }
