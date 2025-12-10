@@ -1,4 +1,3 @@
-
 package edu.apsu.repquest.screens
 
 import androidx.compose.foundation.layout.*
@@ -18,10 +17,18 @@ import androidx.compose.ui.unit.sp
 import edu.apsu.repquest.dataclasses.Goals
 
 @Composable
-fun GoalsScreen() {
-    val goals = remember { mutableStateListOf<Goals>() }
+fun GoalsScreen(
+    savedGoals: List<Goals>,
+    onCreateGoal: (Goals) -> Unit,
+    onUpdateGoal: (Goals) -> Unit,  // Add this parameter
+    onDeleteGoal: (Goals) -> Unit,
+) {
     var showCreateDialog by remember { mutableStateOf(false) }
-    var totalXP by remember { mutableIntStateOf(0) }
+
+    // Calculate total XP from saved goals
+    val totalXP = remember(savedGoals) {
+        savedGoals.filter { it.isCompleted }.sumOf { it.xpAwarded }
+    }
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -35,13 +42,14 @@ fun GoalsScreen() {
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 8.dp),
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
-
-        ){
+        ) {
             Row(
-                modifier = Modifier.fillMaxWidth().padding(16.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
-            ){
+            ) {
                 Text(
                     "Total XP: $totalXP",
                     color = MaterialTheme.colorScheme.onPrimaryContainer,
@@ -54,10 +62,8 @@ fun GoalsScreen() {
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold
                 )
-
             }
         }
-
 
         Spacer(modifier = Modifier.size(16.dp))
         Button(onClick = { showCreateDialog = true }) {
@@ -69,43 +75,40 @@ fun GoalsScreen() {
             modifier = Modifier.fillMaxSize(),
             contentPadding = PaddingValues(bottom = 16.dp)
         ) {
-            items(goals, key = { it.id }) { goal ->
+            items(savedGoals, key = { it.id }) { goal ->
                 GoalCard(
                     goal = goal,
                     onUpdate = { newCurrent ->
-                        val index = goals.indexOfFirst { it.id == goal.id }
-                        if (index != -1) {
-                            val oldGoal = goals[index]
-                            val current = newCurrent.toFloatOrNull() ?: 0f
-                            val target = oldGoal.targetValue.toFloatOrNull() ?: 1f
-                            
-                            if (current >= target && !oldGoal.isCompleted) {
-                                //awarded 50 xp for achieving a goal
-                                val xpReward = 50
-                                totalXP += xpReward
-                                goals[index] = oldGoal.copy(
+                        val current = newCurrent.toFloatOrNull() ?: 0f
+                        val target = goal.targetValue.toFloatOrNull() ?: 1f
+
+                        if (current >= target && !goal.isCompleted) {
+                            // Award 50 XP for achieving a goal
+                            val xpReward = 50
+                            onUpdateGoal(
+                                goal.copy(
                                     currentValue = newCurrent,
                                     isCompleted = true,
                                     xpAwarded = xpReward
                                 )
-                            } else {
-                                goals[index] = oldGoal.copy(currentValue = newCurrent)
-                            }
+                            )
+                        } else {
+                            onUpdateGoal(goal.copy(currentValue = newCurrent))
                         }
                     },
                     onEdit = { newName, newTarget ->
-                        val index = goals.indexOfFirst { it.id == goal.id }
-                        if (index != -1) {
-                            val oldGoal = goals[index]
-                            goals[index] = oldGoal.copy(
+                        onUpdateGoal(
+                            goal.copy(
                                 name = newName,
                                 targetValue = newTarget,
                                 isCompleted = false,
                                 xpAwarded = 0
                             )
-                        }
+                        )
                     },
-                    onDelete = { goals.remove(goal) }
+                    onDelete = {
+                        onDeleteGoal(goal)
+                    }
                 )
             }
         }
@@ -118,7 +121,7 @@ fun GoalsScreen() {
             initialTarget = "",
             onDismiss = { showCreateDialog = false },
             onConfirm = { name, target ->
-                goals.add(Goals(name = name, targetValue = target, currentValue = "0"))
+                onCreateGoal(Goals(name = name, targetValue = target, currentValue = "0"))
                 showCreateDialog = false
             }
         )
@@ -180,15 +183,24 @@ fun GoalCard(
             }
 
             Spacer(modifier = Modifier.size(12.dp))
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
                 Text("Current: ${goal.currentValue}", fontSize = 14.sp)
                 Text("Target: ${goal.targetValue}", fontSize = 14.sp)
             }
             Spacer(modifier = Modifier.size(8.dp))
-            LinearProgressIndicator(progress = { progress }, modifier = Modifier.fillMaxWidth())
+            LinearProgressIndicator(
+                progress = { progress },
+                modifier = Modifier.fillMaxWidth()
+            )
 
-            Text("${(progress * 100).toInt()}% Complete",
-                fontSize = 12.sp, modifier = Modifier.padding(top = 4.dp))
+            Text(
+                "${(progress * 100).toInt()}% Complete",
+                fontSize = 12.sp,
+                modifier = Modifier.padding(top = 4.dp)
+            )
         }
     }
 
@@ -206,15 +218,20 @@ fun GoalCard(
                 )
             },
             confirmButton = {
-                TextButton(onClick = {
-                    if (newValue.isNotBlank()) {
-                        onUpdate(newValue)
-                        showUpdateDialog = false
+                TextButton(
+                    onClick = {
+                        if (newValue.isNotBlank()) {
+                            onUpdate(newValue)
+                            showUpdateDialog = false
+                        }
                     }
-                }) { Text("Update") }
+                ) { Text("Update") }
             },
-            dismissButton = { TextButton(onClick =
-                { showUpdateDialog = false }) { Text("Cancel") } }
+            dismissButton = {
+                TextButton(onClick = { showUpdateDialog = false }) {
+                    Text("Cancel")
+                }
+            }
         )
     }
 
@@ -237,12 +254,20 @@ fun GoalCard(
             title = { Text("Delete Goal") },
             text = { Text("Delete '${goal.name}'?") },
             confirmButton = {
-                TextButton(onClick = {
-                    onDelete()
-                    showDeleteDialog = false
-                }) { Text("Delete", color = MaterialTheme.colorScheme.error) }
+                TextButton(
+                    onClick = {
+                        onDelete()
+                        showDeleteDialog = false
+                    }
+                ) {
+                    Text("Delete", color = MaterialTheme.colorScheme.error)
+                }
             },
-            dismissButton = { TextButton(onClick = { showDeleteDialog = false }) { Text("Cancel") } }
+            dismissButton = {
+                TextButton(onClick = { showDeleteDialog = false }) {
+                    Text("Cancel")
+                }
+            }
         )
     }
 }
@@ -282,34 +307,20 @@ fun GoalDialog(
         },
         confirmButton = {
             TextButton(
-                onClick = { if (name.isNotBlank() && target.isNotBlank()) onConfirm(name, target) },
+                onClick = {
+                    if (name.isNotBlank() && target.isNotBlank()) {
+                        onConfirm(name, target)
+                    }
+                },
                 enabled = name.isNotBlank() && target.isNotBlank()
-            ) { Text(if (initialName.isEmpty()) "Create" else "Save") }
+            ) {
+                Text(if (initialName.isEmpty()) "Create" else "Save")
+            }
         },
-        dismissButton = { TextButton(onClick = onDismiss) { Text("Cancel") } }
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text("Cancel")
+            }
+        }
     )
 }
-
-
-/*
- PLACE HOLDER SCREEN
-
-package edu.apsu.repquest.screens
-
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-
-@Composable
-fun GoalsScreen() {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(text = "Goals Screen")
-    }
-}
-*/

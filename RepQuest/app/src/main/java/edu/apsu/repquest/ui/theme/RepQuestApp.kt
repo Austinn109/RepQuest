@@ -17,6 +17,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import edu.apsu.repquest.WorkoutRepository
 import edu.apsu.repquest.dataclasses.Exercise
+import edu.apsu.repquest.dataclasses.Goals
 import edu.apsu.repquest.dataclasses.UserConfig
 import edu.apsu.repquest.dataclasses.Workout
 import edu.apsu.repquest.navigation.NavigationDestination
@@ -42,6 +43,7 @@ fun RepQuestApp() {
     var pendingExercises by remember { mutableStateOf<List<Exercise>>(emptyList()) }
     var savedWorkouts by remember { mutableStateOf<List<Workout>>(emptyList())}
     var savedUserConfig by remember { mutableStateOf<UserConfig>(UserConfig())}
+    var savedGoals by remember { mutableStateOf<List<Goals>>(emptyList()) }
 
     NavigationSuiteScaffold(
         navigationSuiteItems = {
@@ -146,7 +148,20 @@ fun RepQuestApp() {
                 )
             }
             composable(NavigationDestination.Goals.route) {
-                GoalsScreen()
+                GoalsScreen(
+                    savedGoals = savedGoals,
+                    onCreateGoal = { goal ->
+                        savedGoals = savedGoals + goal
+                    },
+                    onUpdateGoal = { updatedGoal ->  // Add this callback
+                        savedGoals = savedGoals.map {
+                            if (it.id == updatedGoal.id) updatedGoal else it
+                        }
+                    },
+                    onDeleteGoal = { goal ->
+                        savedGoals = savedGoals.filter { it != goal }
+                    }
+                )
             }
             composable(NavigationDestination.Settings.route) {
                 SettingsScreen(
