@@ -8,5 +8,6 @@ data class Exercise(
     var weight: Double,
     val increment: Double = 0.0,
     val restTime: Int = 60,
-    val notes: String = ""
+    val notes: String = "",
+    val goal: String = ""
 )
