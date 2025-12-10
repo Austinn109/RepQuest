@@ -83,7 +83,7 @@ fun SettingsScreen(
                 .padding(16.dp)
         ) {
             Text(
-                text = "Units of Measurement (Distance)",
+                text = "Imperial or Metric",
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold
             )

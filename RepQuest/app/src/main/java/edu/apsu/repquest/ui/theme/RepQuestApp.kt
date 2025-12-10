@@ -74,6 +74,7 @@ fun RepQuestApp() {
             composable(NavigationDestination.Workout.route) {
                 WorkoutScreen(
                     workouts = savedWorkouts,
+                    userConfig = savedUserConfig,
                     onCreateWorkoutClick = {
                         pendingExercises = emptyList()
                         navController.navigate("createWorkout")
@@ -124,6 +125,7 @@ fun RepQuestApp() {
                 val workout = savedWorkouts.find { it.id == workoutId }
                 WorkoutDetailScreen(
                     workout = workout,
+                    userConfig = savedUserConfig,
                     onNavigateBack = { navController.popBackStack() },
                     onFinishedWorkout = { navController.popBackStack() },
                 )

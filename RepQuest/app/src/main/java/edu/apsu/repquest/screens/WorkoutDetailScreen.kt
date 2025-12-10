@@ -56,6 +56,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import edu.apsu.repquest.dataclasses.Exercise
+import edu.apsu.repquest.dataclasses.UserConfig
 import edu.apsu.repquest.dataclasses.Workout
 import kotlinx.coroutines.delay
 import java.util.concurrent.TimeUnit
@@ -64,6 +65,7 @@ import java.util.concurrent.TimeUnit
 @Composable
 fun WorkoutDetailScreen(
     workout: Workout?,
+    userConfig: UserConfig = UserConfig(),
     onNavigateBack: () -> Unit,
     onFinishedWorkout: () -> Unit,
 ) {
@@ -123,7 +125,10 @@ fun WorkoutDetailScreen(
                     .padding(paddingValues),
             ) {
                 items(workout.exercises) { exercise ->
-                    exerciseTracker(exercise = exercise)
+                    exerciseTracker(
+                        exercise = exercise,
+                        userConfig = userConfig,
+                    )
                 }
             }
         }
@@ -133,6 +138,7 @@ fun WorkoutDetailScreen(
 @Composable
 fun exerciseTracker(
     exercise: Exercise,
+    userConfig: UserConfig,
     modifier: Modifier = Modifier,
     activeColor: Color = Color.Blue,
     inactiveColor: Color = Color.White,
@@ -142,6 +148,7 @@ fun exerciseTracker(
     // Placeholder values for all exercise data. Replace to calls to DB using workoutId
     var initialCount = exercise.reps
     var weight by remember { mutableStateOf("") }
+    val weightUnits = if (userConfig.distanceUnit == "Imperial") " lbs" else " kg"
 
     Card(
         modifier = Modifier
@@ -168,7 +175,7 @@ fun exerciseTracker(
                 )
 
                 Text(
-                    text = exercise.weight.toString() + " lbs",
+                    text = exercise.weight.toString() + weightUnits,
                 )
 
 //                OutlinedTextField(

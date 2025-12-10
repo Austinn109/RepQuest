@@ -33,12 +33,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import edu.apsu.repquest.dataclasses.Exercise
+import edu.apsu.repquest.dataclasses.UserConfig
 import edu.apsu.repquest.dataclasses.Workout
 import edu.apsu.repquest.navigation.NavigationDestination
 
 @Composable
 fun WorkoutScreen(
     workouts: List<Workout>,
+    userConfig: UserConfig = UserConfig(),
     onCreateWorkoutClick: () -> Unit,
     onWorkoutClick: (String) -> Unit,
     onDeleteWorkout: (Workout) -> Unit,
@@ -96,6 +98,7 @@ fun WorkoutScreen(
                 items(workouts) { workout ->
                     WorkoutCard(
                         workout = workout,
+                        userConfig = userConfig,
                         onClick = { onWorkoutClick(workout.id) },
                         onDelete = { onDeleteWorkout(workout) }
                     )
@@ -108,10 +111,12 @@ fun WorkoutScreen(
 @Composable
 fun WorkoutCard(
     workout: Workout,
+    userConfig: UserConfig,
     onClick: () -> Unit,
     onDelete: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val weightUnits = if (userConfig.distanceUnit == "Imperial") "lbs" else "kg"
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -157,7 +162,7 @@ fun WorkoutCard(
                        modifier = Modifier.weight(1f)
                    )
                    Text(
-                       text = "${exercise.sets}×${exercise.reps} @ ${exercise.weight}lbs",
+                       text = "${exercise.sets}×${exercise.reps} @ ${exercise.weight}${weightUnits}",
                        fontSize = 14.sp,
                        color = MaterialTheme.colorScheme.onSurfaceVariant
                    )
