@@ -15,6 +15,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import edu.apsu.repquest.WorkoutRepository
 import edu.apsu.repquest.dataclasses.Exercise
 import edu.apsu.repquest.dataclasses.UserConfig
 import edu.apsu.repquest.dataclasses.Workout
@@ -28,6 +29,8 @@ import edu.apsu.repquest.screens.StatsScreen
 import edu.apsu.repquest.screens.WorkoutDetailScreen
 import edu.apsu.repquest.screens.WorkoutScreen
 import java.time.LocalDateTime
+
+
 
 
 @Composable
@@ -135,7 +138,12 @@ fun RepQuestApp() {
                 HistoryScreen()
             }
             composable(NavigationDestination.Stats.route) {
-                StatsScreen()
+                StatsScreen(
+                    repository = WorkoutRepository(),
+                    onExerciseClick = { exerciseName ->
+                        navController.navigate("exerciseTrends/$exerciseName")
+                    }
+                )
             }
             composable(NavigationDestination.Goals.route) {
                 GoalsScreen()
