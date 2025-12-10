@@ -15,6 +15,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import edu.apsu.repquest.dataclasses.Exercise
+import edu.apsu.repquest.dataclasses.UserConfig
 import edu.apsu.repquest.dataclasses.Workout
 import edu.apsu.repquest.navigation.NavigationDestination
 import edu.apsu.repquest.screens.CreateExercise
@@ -36,6 +37,7 @@ fun RepQuestApp() {
 
     var pendingExercises by remember { mutableStateOf<List<Exercise>>(emptyList()) }
     var savedWorkouts by remember { mutableStateOf<List<Workout>>(emptyList())}
+    var savedUserConfig by remember { mutableStateOf<UserConfig>(UserConfig())}
 
     NavigationSuiteScaffold(
         navigationSuiteItems = {
@@ -136,7 +138,14 @@ fun RepQuestApp() {
                 GoalsScreen()
             }
             composable(NavigationDestination.Settings.route) {
-                SettingsScreen()
+                SettingsScreen(
+                    onSaveClick = { userConfig ->
+                        savedUserConfig.distanceUnit = userConfig.distanceUnit
+                        savedUserConfig.timeUnit = userConfig.timeUnit
+                        savedUserConfig.vibrate = userConfig.vibrate
+                        savedUserConfig.chime = userConfig.chime
+                    }
+                )
             }
         }
     }

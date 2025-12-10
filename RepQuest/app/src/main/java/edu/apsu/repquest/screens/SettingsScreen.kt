@@ -31,9 +31,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import edu.apsu.repquest.dataclasses.UserConfig
 
 @Composable
-fun SettingsScreen() {
+fun SettingsScreen(
+    onSaveClick: (UserConfig) -> Unit,
+) {
     var selectedTimeOption by remember { mutableStateOf("") }
     val timeMeasureOptions = listOf("seconds", "minutes")
 
@@ -150,6 +153,21 @@ fun SettingsScreen() {
                 ) {
                     Text(text = "Download")
                 }
+            }
+
+            Button(
+                enabled = (selectedDistanceOption.isNotBlank() && selectedTimeOption.isNotBlank()),
+                onClick = {
+                    val userConfig = UserConfig(
+                        timeUnit = selectedTimeOption,
+                        distanceUnit = selectedDistanceOption,
+                        vibrate = vibrationsChecked,
+                        chime = chimeChecked
+                    )
+                    onSaveClick(userConfig)
+                }
+            ) {
+                Text(text = "Save Settings")
             }
         }
     }
